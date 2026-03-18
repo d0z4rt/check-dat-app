@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
+import { ApplicationsModule } from './applications/applications.module'
 import { TypeOrmConfigService } from './utils/typeorm-config.service'
 import { validateConfig } from './utils/validate-config'
 
@@ -15,7 +16,8 @@ import { validateConfig } from './utils/validate-config'
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useClass: TypeOrmConfigService
-    })
+    }),
+    ApplicationsModule
   ],
   controllers: [AppController],
   providers: [AppService]

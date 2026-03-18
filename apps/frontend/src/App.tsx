@@ -1,13 +1,25 @@
-import type { Component } from 'solid-js'
+import { Router } from '@solidjs/router'
+import { Suspense, type Component } from 'solid-js'
+import { Toaster } from 'solid-toast'
 
-import Comp from './Comp'
+import Header from './components/Header'
+import routes from './routes'
 
 const App: Component = () => {
   return (
-    <>
-      <p class="text-4xl text-green-700 text-center py-20">Hello tailwind!</p>
-      <Comp />
-    </>
+    <Suspense fallback={'loading'}>
+      <Router
+        root={(props) => (
+          <div class="min-h-screen bg-gray-100">
+            <Toaster />
+            <Header />
+            <main class="container mx-auto px-4 py-8">{props.children}</main>
+          </div>
+        )}
+      >
+        {routes}
+      </Router>
+    </Suspense>
   )
 }
 

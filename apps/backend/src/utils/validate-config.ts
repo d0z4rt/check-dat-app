@@ -1,6 +1,5 @@
 import * as z from 'zod'
 
-// Define your Zod schema
 const configSchema = z.object({
   NODE_ENV: z
     .enum(['development', 'production', 'test', 'provision'])
