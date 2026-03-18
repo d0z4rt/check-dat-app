@@ -1,0 +1,42 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": [
+    "eslint",
+    "typescript",
+    "unicorn",
+    "oxc",
+    "import",
+    "jsdoc",
+    "jsx-a11y",
+    "node",
+    "promise"
+  ],
+  "jsPlugins": [
+    {
+      "name": "solid",
+      "specifier": "eslint-plugin-solid"
+    }
+  ],
+  "rules": {
+    "no-console": "warn",
+    "solid/components-return-once": "error",
+    "solid/event-handlers": "error",
+    "solid/imports": "error",
+    "solid/jsx-no-duplicate-props": "error",
+    "solid/jsx-no-script-url": "error",
+    "solid/jsx-no-undef": "error",
+    "solid/jsx-uses-vars": "off",
+    "solid/no-array-handlers": "error",
+    "solid/no-destructure": "warn",
+    "solid/no-innerhtml": "warn",
+    "solid/no-react-deps": "error",
+    "solid/no-react-specific-props": "error",
+    "solid/no-unknown-namespaces": "error",
+    "solid/prefer-classlist": "warn",
+    "solid/prefer-for": "error",
+    "solid/prefer-show": "error",
+    "solid/reactivity": "warn", // bugged ? see: https://github.com/solidjs-community/eslint-plugin-solid/issues/197
+    "solid/self-closing-comp": "error",
+    "solid/style-prop": "error"
+  }
+}

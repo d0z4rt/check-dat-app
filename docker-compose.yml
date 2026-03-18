@@ -1,0 +1,36 @@
+services:
+  database:
+    image: postgres
+    container_name:   database
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - database:/var/lib/postgresql
+    ports:
+      - 5432:5432
+    restart: always
+    networks:
+      - database
+  
+  # Database manager
+  # ! DEV ONLY !
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    depends_on:
+      - database
+    ports:
+      - 8080:8080
+    networks:
+      - database
+
+networks:
+  database:
+    driver: bridge
+
+volumes:
+  database:
+    driver: local

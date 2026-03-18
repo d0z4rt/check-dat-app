@@ -1,0 +1,43 @@
+{
+  "name": "root",
+  "private": true,
+  "scripts": {
+    "lerna": "lerna",
+    "dev": "lerna run dev --stream",
+    "start": "lerna run start",
+    "start:server": "lerna run start:debug --stream",
+    "build": "lerna run build",
+    "test": "lerna run test",
+    "test:watch": "lerna run test:watch",
+    "test:ui": "lerna run test:ui",
+    "coverage": "lerna run coverage",
+    "check": "oxlint && oxfmt",
+    "format": "oxfmt",
+    "lint": "oxlint --fix --fix-suggestions",
+    "clean": "lerna clean",
+    "docker": "docker compose -f docker-compose.yml up --build",
+    "prepare": "husky",
+    "release": "lerna version -m \"chore(release): publish\" --conventional-commits --conventional-graduate",
+    "prerelease": "lerna version -m \"chore(release): publish\" --conventional-commits --conventional-prerelease --preid beta"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "20.5.0",
+    "@commitlint/config-conventional": "^20.5.0",
+    "@commitlint/types": "^20.5.0",
+    "eslint-plugin-solid": "^0.14.5",
+    "husky": "^9.1.7",
+    "lerna": "^9.0.7",
+    "lint-staged": "^16.4.0",
+    "oxfmt": "^0.41.0",
+    "oxlint": "^1.56.0"
+  },
+  "lint-staged": {
+    "**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx,vue,astro,svelte}": "oxlint",
+    "*": "oxfmt --no-error-on-unmatched-pattern"
+  },
+  "engines": {
+    "node": ">=22",
+    "pnpm": ">=10"
+  },
+  "packageManager": "pnpm@10.32.1"
+}
