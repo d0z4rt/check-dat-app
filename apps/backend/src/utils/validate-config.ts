@@ -9,8 +9,7 @@ const configSchema = z.object({
   DB_NAME: z.string().min(1),
   DB_USER: z.string().min(1),
   DB_PASSWORD: z.string().min(1),
-  JWT_SECRET: z.string().min(1),
-  JWT_ACCESS_EXPIRATION_MINUTES: z.string().min(1)
+  VIRUSTOTAL_API_KEY: z.string().min(1)
 })
 
 export const validateConfig = (config: Record<string, any>) => {

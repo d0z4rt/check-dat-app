@@ -1,7 +1,7 @@
 services:
   database:
     image: postgres
-    container_name:   database
+    container_name: database
     environment:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
@@ -13,13 +13,26 @@ services:
     restart: always
     networks:
       - database
-  
+
+  # ! this is for dev only in prod use redis/redis-stack-server
+  # see: https://redis.io/docs/latest/operate/oss_and_stack/install/archive/install-stack/docker/
+  redis-stack:
+    image: redis/redis-stack
+    container_name: redis-stack
+    volumes:
+      - redis:/data
+    ports:
+      - 6379:6379
+      - 8001:8001
+
   # Database manager
   # ! DEV ONLY !
   adminer:
     image: adminer
     container_name: adminer
     restart: always
+    environment:
+      - ADMINER_DEFAULT_SERVER=database
     depends_on:
       - database
     ports:
@@ -33,4 +46,6 @@ networks:
 
 volumes:
   database:
+    driver: local
+  redis:
     driver: local

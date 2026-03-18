@@ -1,10 +1,11 @@
 import { extname } from 'node:path'
 
-import { Module } from '@nestjs/common'
+import { forwardRef, Module } from '@nestjs/common'
 import { MulterModule } from '@nestjs/platform-express'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { diskStorage } from 'multer'
 
+import { QueueModule } from '../queue/queue.module'
 import { Application } from './application.entity'
 import { ApplicationsController } from './applications.controller'
 import { ApplicationsService } from './applications.service'
@@ -32,9 +33,11 @@ import { ApplicationsService } from './applications.service'
       limits: {
         fileSize: 200 * 1024 * 1024 // 200MB max
       }
-    })
+    }),
+    forwardRef(() => QueueModule)
   ],
   controllers: [ApplicationsController],
-  providers: [ApplicationsService]
+  providers: [ApplicationsService],
+  exports: [ApplicationsService]
 })
 export class ApplicationsModule {}

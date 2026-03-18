@@ -5,14 +5,15 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
+import { QueueService } from '../queue/queue.service'
 import { Application } from './application.entity'
-import { UpdateApplicationDto } from './application.interface'
 
 @Injectable()
 export class ApplicationsService {
   constructor(
     @InjectRepository(Application)
-    private repository: Repository<Application>
+    private repository: Repository<Application>,
+    private readonly queueService: QueueService
   ) {}
 
   async create(file: Express.Multer.File) {
@@ -33,7 +34,11 @@ export class ApplicationsService {
       size: file.size
     })
 
-    return this.repository.save(application)
+    const savedApplication = await this.repository.save(application)
+
+    await this.queueService.addToScanQueue(savedApplication)
+
+    return savedApplication
   }
 
   async findAll() {
@@ -44,7 +49,7 @@ export class ApplicationsService {
     return this.repository.findOne({ where: { id } })
   }
 
-  async update(id: string, data: UpdateApplicationDto) {
+  async update(id: string, data: Partial<Application>) {
     const application = await this.repository.findOneByOrFail({ id })
     return this.repository.save(Object.assign(application, data))
   }

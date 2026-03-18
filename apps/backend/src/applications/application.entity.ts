@@ -38,6 +38,9 @@ export class Application {
   scanResult: string
 
   @CreateDateColumn({ type: 'timestamptz', precision: 3 })
+  scanDate: Date
+
+  @CreateDateColumn({ type: 'timestamptz', precision: 3 })
   createdAt: Date
 
   @UpdateDateColumn({ type: 'timestamptz', precision: 3 })
