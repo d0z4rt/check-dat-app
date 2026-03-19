@@ -3,9 +3,11 @@ import { Suspense, type Component } from 'solid-js'
 import { Toaster } from 'solid-toast'
 
 import Header from './components/Header'
+import useScanSSE from './hooks/useScanSSE'
 import routes from './routes'
 
 const App: Component = () => {
+  useScanSSE()
   return (
     <Router
       root={(props) => (
@@ -39,11 +41,11 @@ const App: Component = () => {
           </div>
           <video
             role="presentation"
-            autoplay=""
-            muted=""
-            playsinline=""
-            loop=""
-            src="/bg-credit-pradeo.mp4"
+            autoplay={true}
+            muted={true}
+            playsinline={true}
+            loop={true}
+            src="/bg-credit-pradeo.webm"
             class="z-0 absolute top-0 left-0 w-full h-full object-cover"
           />
         </>

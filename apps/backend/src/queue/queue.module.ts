@@ -1,6 +1,7 @@
 import { BullModule } from '@nestjs/bullmq'
 import { forwardRef, Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
+import { NotifyModule } from 'src/notify/notify.module'
 
 import { Application } from '../applications/application.entity'
 import { ApplicationsModule } from '../applications/applications.module'
@@ -15,7 +16,8 @@ import { QueueService } from './queue.service'
       name: 'scan'
     }),
     VirusTotalModule,
-    forwardRef(() => ApplicationsModule)
+    forwardRef(() => ApplicationsModule),
+    NotifyModule
   ],
   providers: [QueueService, QueueProcessor],
   exports: [QueueService]

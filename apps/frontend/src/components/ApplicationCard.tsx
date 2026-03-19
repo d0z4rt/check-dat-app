@@ -5,7 +5,6 @@ import type { Application } from '../types/application'
 
 type Props = {
   application: Application
-  onDelete: () => void
 }
 
 const ApplicationCard: Component<Props> = (props) => {
@@ -139,13 +138,6 @@ const ApplicationCard: Component<Props> = (props) => {
               </div>
             )}
           </Show>
-
-          <button
-            onClick={() => props.onDelete()}
-            class="text-sm text-slate-300 hover:text-red-400 transition-colors mt-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400/50 rounded px-2 py-1"
-          >
-            Supprimer
-          </button>
         </div>
       </div>
     </A>

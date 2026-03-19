@@ -8,6 +8,8 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { ApplicationsModule } from './applications/applications.module'
+import { NotifyModule } from './notify/notify.module'
+import { QueueModule } from './queue/queue.module'
 import { TypeOrmConfigService } from './utils/typeorm-config.service'
 import { validateConfig } from './utils/validate-config'
 import { VirusTotalModule } from './virus-total/virus-total.module'
@@ -40,7 +42,9 @@ import { VirusTotalModule } from './virus-total/virus-total.module'
       })
     }),
     ApplicationsModule,
-    VirusTotalModule
+    QueueModule,
+    VirusTotalModule,
+    NotifyModule
   ],
   controllers: [AppController],
   providers: [

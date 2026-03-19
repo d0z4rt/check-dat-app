@@ -1,17 +1,10 @@
-import { createAsync, query, revalidate } from '@solidjs/router'
-import {
-  type Component,
-  For,
-  onCleanup,
-  onMount,
-  Show,
-  Suspense
-} from 'solid-js'
+import { createAsync, query } from '@solidjs/router'
+import { type Component, For, Show, Suspense } from 'solid-js'
 
 import { applicationsApi } from '../api'
 import ApplicationCard from './ApplicationCard'
 
-const getApplications = query(async () => {
+export const getApplications = query(async () => {
   try {
     return await applicationsApi.getAll()
   } catch (error) {
@@ -22,29 +15,6 @@ const getApplications = query(async () => {
 
 const ApplicationList: Component = () => {
   const applications = createAsync(() => getApplications())
-  let interval: NodeJS.Timeout
-  const refreshApplications = () => {
-    // revalidate(getApplications.key)
-  }
-
-  onMount(() => {
-    // Rafraîchir toutes les 5 secondes pour les scans en cours
-    interval = setInterval(refreshApplications, 5000)
-  })
-
-  onCleanup(() => clearInterval(interval))
-
-  const handleDelete = async (id: string) => {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cette application ?')) {
-      try {
-        await applicationsApi.delete(id)
-        refreshApplications()
-      } catch (error) {
-        // oxlint-disable-next-line no-console
-        console.error('Erreur lors de la suppression:', error)
-      }
-    }
-  }
 
   return (
     <div class="bg-slate-700/50 backdrop-blur-lg rounded-lg border border-slate-600/50 shadow-2xl p-6">
@@ -66,12 +36,7 @@ const ApplicationList: Component = () => {
         </Show>
         <div class="flex flex-wrap gap-2">
           <For each={applications()}>
-            {(app) => (
-              <ApplicationCard
-                application={app}
-                onDelete={() => handleDelete(app.id)}
-              />
-            )}
+            {(app) => <ApplicationCard application={app} />}
           </For>
         </div>
       </Suspense>

@@ -6,6 +6,7 @@ type Props = {
   application: Application
   onDownload: () => void
   onEdit: (isEditing: true) => void
+  onDelete: () => void
 }
 
 const ApplicationDetails: Component<Props> = (props) => {
@@ -27,6 +28,12 @@ const ApplicationDetails: Component<Props> = (props) => {
             class="px-4 py-2 bg-sky-600 text-white rounded-md hover:bg-sky-700 transition-colors"
           >
             Modifier
+          </button>
+          <button
+            onClick={() => props.onDelete()}
+            class="px-4 py-2 border border-rose-500 text-rose-500 rounded-md hover:bg-rose-500 hover:text-white transition-colors"
+          >
+            Supprimer
           </button>
         </div>
       </div>

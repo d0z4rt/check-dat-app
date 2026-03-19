@@ -3,6 +3,7 @@ import { Logger } from '@nestjs/common'
 import { Job } from 'bullmq'
 
 import { ApplicationsService } from '../applications/applications.service'
+import { NotifyService } from '../notify/notify.service'
 import { VirusTotalService } from '../virus-total/virus-total.service'
 
 @Processor('scan')
@@ -11,7 +12,8 @@ export class QueueProcessor extends WorkerHost {
 
   constructor(
     private virusTotalService: VirusTotalService,
-    private readonly applicationsService: ApplicationsService
+    private readonly applicationsService: ApplicationsService,
+    private readonly notifyService: NotifyService
   ) {
     super()
   }
@@ -28,10 +30,14 @@ export class QueueProcessor extends WorkerHost {
 
       const result = await this.virusTotalService.scanFile(hash)
 
+      await new Promise((resolve) => setTimeout(resolve, 10000))
+
       await this.applicationsService.update(applicationId, {
         scanStatus: result.status === 'MALICIOUS' ? 'MALICIOUS' : 'SAFE',
         scanResult: JSON.stringify(result)
       })
+
+      this.notifyService.emitScanCompleted(applicationId, result)
 
       this.logger.log(`Scan terminé pour l'application ${applicationId}`)
     } catch (error) {
@@ -41,6 +47,8 @@ export class QueueProcessor extends WorkerHost {
         scanStatus: 'ERROR',
         scanResult: JSON.stringify({ error: error.message })
       })
+
+      this.notifyService.emitScanFailed(applicationId, error)
 
       throw error
     }

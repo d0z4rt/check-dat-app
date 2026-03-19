@@ -5,7 +5,8 @@ import {
   createAsync,
   query,
   action,
-  useAction
+  useAction,
+  redirect
 } from '@solidjs/router'
 import { type Component, createSignal, Show, Suspense } from 'solid-js'
 import toast from 'solid-toast'
@@ -14,7 +15,7 @@ import { applicationsApi } from '../api'
 import ApplicationDetails from '../components/ApplicationDetails'
 import ApplicationEditor from '../components/ApplicationEditor'
 
-const getApplication = query(async (id: string) => {
+export const getApplication = query(async (id: string) => {
   try {
     return await applicationsApi.getOne(id)
   } catch {
@@ -32,6 +33,11 @@ const updateApplication = action(
   'update-application'
 )
 
+const deleteApplication = action(async (id: string) => {
+  await applicationsApi.delete(id)
+  throw redirect('/')
+}, 'delete-application')
+
 const Application: Component<RouteSectionProps> = (props) => {
   const application = createAsync(() => getApplication(props.params.id!))
   const params = useParams()
@@ -39,6 +45,7 @@ const Application: Component<RouteSectionProps> = (props) => {
   const [editing, setEditing] = createSignal(false)
 
   const update = useAction(updateApplication)
+  const deleteApp = useAction(deleteApplication)
 
   const handleSave = async (e: { name?: string; comment?: string }) => {
     try {
@@ -61,6 +68,17 @@ const Application: Component<RouteSectionProps> = (props) => {
       return
     }
     applicationsApi.download(params.id)
+  }
+
+  const handleDelete = async (id: string) => {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cette application ?')) {
+      try {
+        await deleteApp(id)
+      } catch (error) {
+        // oxlint-disable-next-line no-console
+        console.error('Erreur lors de la suppression:', error)
+      }
+    }
   }
 
   return (
@@ -93,6 +111,7 @@ const Application: Component<RouteSectionProps> = (props) => {
                   application={app()}
                   onDownload={() => handleDownload()}
                   onEdit={(e) => setEditing(e)}
+                  onDelete={() => handleDelete(params.id!)}
                 />
               )}
             </Show>
