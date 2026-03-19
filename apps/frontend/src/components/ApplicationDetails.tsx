@@ -12,19 +12,19 @@ const ApplicationDetails: Component<Props> = (props) => {
   return (
     <div>
       <div class="flex justify-between items-start">
-        <h1 class="text-2xl font-bold text-gray-900">
+        <h1 class="text-2xl font-bold text-white">
           {props.application.name || props.application.filename}
         </h1>
         <div class="flex space-x-2">
           <button
             onClick={() => props.onDownload()}
-            class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+            class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
           >
             Télécharger
           </button>
           <button
             onClick={() => props.onEdit(true)}
-            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            class="px-4 py-2 bg-sky-600 text-white rounded-md hover:bg-sky-700 transition-colors"
           >
             Modifier
           </button>
@@ -32,33 +32,31 @@ const ApplicationDetails: Component<Props> = (props) => {
       </div>
 
       <Show when={props.application.comment}>
-        <div class="mt-4 p-4 bg-gray-50 rounded-lg">
-          <p class="text-gray-700 italic">"{props.application.comment}"</p>
+        <div class="mt-4 p-4 bg-slate-900/50 border border-slate-700/50 rounded-lg">
+          <p class="text-slate-300 italic">"{props.application.comment}"</p>
         </div>
       </Show>
 
       <dl class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <dt class="text-sm font-medium text-gray-500">Fichier</dt>
-          <dd class="mt-1 text-sm text-gray-900">
-            {props.application.filename}
-          </dd>
+          <dt class="text-sm font-medium text-slate-400">Fichier</dt>
+          <dd class="mt-1 text-sm text-white">{props.application.filename}</dd>
         </div>
         <div>
-          <dt class="text-sm font-medium text-gray-500">Hash</dt>
-          <dd class="mt-1 text-sm text-gray-900 font-mono break-all">
+          <dt class="text-sm font-medium text-slate-400">Hash</dt>
+          <dd class="mt-1 text-sm text-slate-300 font-mono break-all">
             {props.application.hash}
           </dd>
         </div>
         <div>
-          <dt class="text-sm font-medium text-gray-500">Taille</dt>
-          <dd class="mt-1 text-sm text-gray-900">
+          <dt class="text-sm font-medium text-slate-400">Taille</dt>
+          <dd class="mt-1 text-sm text-white">
             {((props.application.size || 0) / 1024 / 1024).toFixed(2)} MB
           </dd>
         </div>
         <div>
-          <dt class="text-sm font-medium text-gray-500">Ajouté le</dt>
-          <dd class="mt-1 text-sm text-gray-900">
+          <dt class="text-sm font-medium text-slate-400">Ajouté le</dt>
+          <dd class="mt-1 text-sm text-white">
             {new Date(props.application.createdAt).toLocaleDateString('fr-FR', {
               dateStyle: 'long'
             })}
@@ -69,37 +67,39 @@ const ApplicationDetails: Component<Props> = (props) => {
       <Show when={props.application.scanResult}>
         {(result) => (
           <div class="mt-6">
-            <h2 class="text-lg font-semibold mb-4">Résultats du scan</h2>
+            <h2 class="text-lg font-semibold mb-4 text-white">
+              Résultats du scan
+            </h2>
 
-            <div class="bg-gray-50 rounded-lg p-4">
+            <div class="bg-slate-900/50 border border-slate-700/50 rounded-lg p-4">
               <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
                 <div class="text-center">
-                  <div class="text-2xl font-bold text-green-600">
+                  <div class="text-2xl font-bold text-green-400">
                     {result().stats?.undetected || 0}
                   </div>
-                  <div class="text-sm text-gray-500">Sûrs</div>
+                  <div class="text-sm text-slate-400">Sûrs</div>
                 </div>
                 <div class="text-center">
-                  <div class="text-2xl font-bold text-red-600">
+                  <div class="text-2xl font-bold text-red-400">
                     {result().stats?.malicious || 0}
                   </div>
-                  <div class="text-sm text-gray-500">Malveillants</div>
+                  <div class="text-sm text-slate-400">Malveillants</div>
                 </div>
                 <div class="text-center">
-                  <div class="text-2xl font-bold text-yellow-600">
+                  <div class="text-2xl font-bold text-yellow-400">
                     {result().stats?.suspicious || 0}
                   </div>
-                  <div class="text-sm text-gray-500">Suspects</div>
+                  <div class="text-sm text-slate-400">Suspects</div>
                 </div>
                 <div class="text-center">
-                  <div class="text-2xl font-bold text-gray-600">
+                  <div class="text-2xl font-bold text-slate-300">
                     {result().stats?.harmless || 0}
                   </div>
-                  <div class="text-sm text-gray-500">Sans danger</div>
+                  <div class="text-sm text-slate-400">Sans danger</div>
                 </div>
               </div>
 
-              <p class="mt-4 text-sm text-gray-500 text-center">
+              <p class="mt-4 text-sm text-slate-400 text-center">
                 Dernière analyse:{' '}
                 {props.application.scanDate
                   ? new Date(props.application.scanDate).toLocaleString('fr-FR')

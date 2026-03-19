@@ -22,17 +22,17 @@ const getApplications = query(async () => {
 
 const ApplicationList: Component = () => {
   const applications = createAsync(() => getApplications())
-
+  let interval: NodeJS.Timeout
   const refreshApplications = () => {
-    revalidate(getApplications.key)
+    // revalidate(getApplications.key)
   }
 
   onMount(() => {
     // Rafraîchir toutes les 5 secondes pour les scans en cours
-    const interval = setInterval(refreshApplications, 5000)
-
-    onCleanup(() => clearInterval(interval))
+    interval = setInterval(refreshApplications, 5000)
   })
+
+  onCleanup(() => clearInterval(interval))
 
   const handleDelete = async (id: string) => {
     if (confirm('Êtes-vous sûr de vouloir supprimer cette application ?')) {
@@ -47,8 +47,10 @@ const ApplicationList: Component = () => {
   }
 
   return (
-    <div class="bg-white rounded-lg shadow p-6">
-      <h2 class="text-lg font-semibold mb-4">Bibliothèque d'applications</h2>
+    <div class="bg-slate-700/50 backdrop-blur-lg rounded-lg border border-slate-600/50 shadow-2xl p-6">
+      <h2 class="text-lg font-semibold mb-4 text-white">
+        Bibliothèque d'applications
+      </h2>
       <Suspense
         fallback={
           <div class="text-center py-8">
@@ -62,7 +64,7 @@ const ApplicationList: Component = () => {
             Aucune application téléversée
           </div>
         </Show>
-        <div class="space-y-4">
+        <div class="flex flex-wrap gap-2">
           <For each={applications()}>
             {(app) => (
               <ApplicationCard

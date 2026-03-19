@@ -54,13 +54,15 @@ const UploadForm: Component = () => {
   }
 
   return (
-    <div class="bg-white rounded-lg shadow p-6">
-      <h2 class="text-lg font-semibold mb-4">Téléverser une application</h2>
+    <div class="bg-slate-700/50 backdrop-blur-lg rounded-lg border border-slate-600/50 shadow-2xl p-6">
+      <h2 class="text-lg font-semibold mb-4 text-white">
+        Téléverser une application
+      </h2>
       <div class="space-y-4">
         <div>
           <label
             for="file-upload"
-            class="block text-sm font-medium text-gray-700 mb-2"
+            class="block text-sm font-medium text-sky-300 mb-2"
           >
             Fichier APK
           </label>
@@ -69,17 +71,17 @@ const UploadForm: Component = () => {
             type="file"
             accept=".apk"
             onChange={handleFileChange}
-            class="block w-full text-sm text-gray-500
+            class="block w-full text-sm text-sky-400
                    file:mr-4 file:py-2 file:px-4
                    file:rounded-md file:border-0
                    file:text-sm file:font-semibold
-                   file:bg-blue-50 file:text-blue-700
+                   file:bg-[linear-gradient(45deg,#009A9E_45%,#5CEADC_100%)] file:text-white
                    hover:file:bg-blue-100"
           />
         </div>
         <Show when={file()}>
           {(f) => (
-            <div class="text-sm text-gray-600">
+            <div class="text-sm text-sky-300">
               Fichier sélectionné: {f()?.name} (
               {(f()!.size / 1024 / 1024).toFixed(2)} MB)
             </div>
@@ -88,8 +90,8 @@ const UploadForm: Component = () => {
         <button
           onClick={handleUpload}
           disabled={!file() || submission.pending}
-          class="px-4 py-2 bg-blue-600 text-white rounded-md
-                 hover:bg-blue-700 disabled:bg-gray-300
+          class="px-4 py-2 bg-sky-600 text-white rounded-md
+                 hover:bg-sky-700 disabled:bg-slate-900
                  disabled:cursor-not-allowed transition-colors"
         >
           {submission.pending ? 'Téléversement...' : 'Téléverser'}

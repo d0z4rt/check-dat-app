@@ -66,21 +66,26 @@ const Application: Component<RouteSectionProps> = (props) => {
   return (
     <Suspense
       fallback={
-        <div class="text-center py-12">
-          <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-blue-600 border-t-transparent" />
-          <p class="mt-2 text-gray-600">Chargement...</p>
+        <div class="text-center py-16">
+          <div class="inline-block animate-spin rounded-full h-10 w-10 border-3 border-sky-400 border-t-transparent" />
+          <p class="mt-4 text-slate-300 font-medium">
+            Chargement de l'application...
+          </p>
         </div>
       }
     >
-      <div class="max-w-4xl mx-auto">
+      <div class="max-w-5xl mx-auto">
         <button
           onClick={() => navigate('/')}
-          class="mb-6 text-blue-600 hover:text-blue-800 flex items-center"
+          class="group mb-8 text-sky-400 hover:text-sky-300 flex items-center gap-2 transition-colors font-medium"
         >
-          ← Retour à la liste
+          <span class="transform transition-transform group-hover:-translate-x-1">
+            ←
+          </span>
+          Retour à la liste
         </button>
 
-        <div class="bg-white rounded-lg shadow overflow-hidden">
+        <div class="bg-slate-700/50 backdrop-blur-lg rounded-lg border border-slate-600/50 overflow-hidden shadow-2xl">
           <div class="p-6">
             <Show when={application()}>
               {(app) => (
@@ -92,12 +97,17 @@ const Application: Component<RouteSectionProps> = (props) => {
               )}
             </Show>
             <Show when={editing()}>
-              <ApplicationEditor
-                name={application()?.name}
-                comment={application()?.comment}
-                onSave={(e) => handleSave(e)}
-                onCancel={() => setEditing(false)}
-              />
+              <div class="mt-8 pt-8 border-t border-slate-600">
+                <h3 class="text-xl font-semibold text-white mb-6">
+                  Modifier l'application
+                </h3>
+                <ApplicationEditor
+                  name={application()?.name}
+                  comment={application()?.comment}
+                  onSave={(e) => handleSave(e)}
+                  onCancel={() => setEditing(false)}
+                />
+              </div>
             </Show>
           </div>
         </div>

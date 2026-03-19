@@ -15,37 +15,49 @@ const ApplicationCard: Component<Props> = (props) => {
     switch (status) {
       case 'PENDING':
         return {
-          color: 'bg-yellow-100 text-yellow-800',
+          bgColor: 'bg-yellow-500/10',
+          textColor: 'text-yellow-400',
+          borderColor: 'border-yellow-500/20',
           text: 'En attente',
           icon: '⏳'
         }
       case 'SCANNING':
         return {
-          color: 'bg-blue-100 text-blue-800',
+          bgColor: 'bg-electric-blue/10',
+          textColor: 'text-electric-blue',
+          borderColor: 'border-electric-blue/20',
           text: 'Analyse en cours',
           icon: '🔍'
         }
       case 'SAFE':
         return {
-          color: 'bg-green-100 text-green-800',
+          bgColor: 'bg-green-500/10',
+          textColor: 'text-green-400',
+          borderColor: 'border-green-500/20',
           text: 'Sûre',
           icon: '✅'
         }
       case 'MALICIOUS':
         return {
-          color: 'bg-red-100 text-red-800',
+          bgColor: 'bg-red-500/10',
+          textColor: 'text-red-400',
+          borderColor: 'border-red-500/20',
           text: 'Virus détecté',
           icon: '⚠️'
         }
       case 'ERROR':
         return {
-          color: 'bg-gray-100 text-gray-800',
+          bgColor: 'bg-gray-500/10',
+          textColor: 'text-gray-400',
+          borderColor: 'border-gray-500/20',
           text: 'Erreur',
           icon: '❌'
         }
       default:
         return {
-          color: 'bg-gray-100 text-gray-800',
+          bgColor: 'bg-gray-500/10',
+          textColor: 'text-gray-400',
+          borderColor: 'border-gray-500/20',
           text: 'Inconnu',
           icon: '❓'
         }
@@ -55,55 +67,74 @@ const ApplicationCard: Component<Props> = (props) => {
   const displayName = () => props.application.name || props.application.filename
 
   return (
-    <div class="border rounded-lg p-4 hover:shadow-md transition-shadow">
-      <div class="flex items-center justify-between">
-        <div class="flex-1">
-          <A href={`/application/${props.application.id}`} class="block">
-            <h3 class="text-lg font-medium text-gray-900 hover:text-blue-600">
+    <A
+      href={`/application/${props.application.id}`}
+      class="w-[30%] grow group bg-slate-700/80 rounded-xl p-6 transition-all duration-300 hover:shadow-xl/20"
+    >
+      <div class="flex items-start justify-between gap-6 h-full">
+        <div class="flex flex-col flex-1 w-full min-w-0 h-full justify-between">
+          <div>
+            <h3 class="text-xl font-semibold text-sky-300 group-hover:text-electric-blue transition-colors truncate">
               {displayName()}
             </h3>
-          </A>
 
-          <div class="mt-2 space-y-1">
-            <p class="text-sm text-gray-500">
-              Fichier: {props.application.filename}
-            </p>
-            <p class="text-sm text-gray-500">
-              Taille: {(props.application.size / 1024 / 1024).toFixed(2)} MB
-            </p>
-            <p class="text-sm text-gray-500">
-              Hash: {props.application.hash.substring(0, 16)}...
-            </p>
-            <Show when={props.application.comment}>
-              {(comment) => (
-                <p class="text-sm text-gray-600 mt-2">"{comment()}"</p>
-              )}
-            </Show>
+            <div class="flex flex-col mt-4 space-y-2 w-full  align-self-end">
+              <p class="text-sm text-slate-300 flex items-end gap-2">
+                <span class=" text-slate-400">Fichier:</span>
+                <span class="font-mono text-xs truncate w-full">
+                  {props.application.filename}
+                </span>
+              </p>
+              <p class="text-sm text-slate-300 flex items-end gap-2">
+                <span class=" text-slate-400">Taille:</span>
+                <span>
+                  {(props.application.size / 1024 / 1024).toFixed(2)} MB
+                </span>
+              </p>
+              <p class="text-sm text-slate-300 flex items-end gap-2">
+                <span class="text-slate-400">Hash:</span>
+                <span class="font-mono text-xs text-slate-300">
+                  {props.application.hash.substring(0, 16)}...
+                </span>
+              </p>
 
-            <p class="text-xs text-gray-400">
-              Ajouté{' '}
-              {new Date(props.application.createdAt).toLocaleDateString(
-                'fr-FR'
-              )}
-            </p>
+              <Show when={props.application.comment}>
+                {(comment) => (
+                  <p class="text-sm text-slate-200 italic border-l-2 border-slate-600 pl-3 mt-1">
+                    "{comment()}"
+                  </p>
+                )}
+              </Show>
+            </div>
           </div>
+          <p class="text-xs text-sky-300 pt-2">
+            Ajouté le{' '}
+            {new Date(props.application.createdAt).toLocaleDateString('fr-FR', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric'
+            })}
+          </p>
         </div>
 
-        <div class="ml-4 flex flex-col items-end space-y-2">
+        <div class="flex flex-col items-end space-y-3">
           <span
-            class={`px-3 py-1 rounded-full text-sm font-medium ${getStatusInfo().color}`}
+            class={`px-3 py-1.5 rounded-full text-sm font-medium border ${getStatusInfo().bgColor} ${getStatusInfo().textColor} ${getStatusInfo().borderColor}`}
           >
-            <span class="mr-1">{getStatusInfo().icon}</span>
+            <span class="mr-1.5 opacity-75">{getStatusInfo().icon}</span>
             {getStatusInfo().text}
           </span>
 
           <Show when={props.application.scanResult?.stats}>
             {(stats) => (
-              <div class="text-xs text-gray-500">
-                <span class="text-green-600">{stats().harmless} sûrs</span>
-                {' · '}
-                <span class="text-red-600">
-                  {stats().malicious} malveillants
+              <div class="text-xs bg-slate-900/50 rounded-lg px-3 py-2 border border-slate-700/50">
+                <span class="text-green-400">
+                  {stats().harmless} sûr{stats().harmless !== 1 ? 's' : ''}
+                </span>
+                <span class="text-slate-400 mx-1">·</span>
+                <span class="text-red-400">
+                  {stats().malicious} malveillant
+                  {stats().malicious !== 1 ? 's' : ''}
                 </span>
               </div>
             )}
@@ -111,13 +142,13 @@ const ApplicationCard: Component<Props> = (props) => {
 
           <button
             onClick={() => props.onDelete()}
-            class="text-sm text-red-600 hover:text-red-800"
+            class="text-sm text-slate-300 hover:text-red-400 transition-colors mt-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400/50 rounded px-2 py-1"
           >
             Supprimer
           </button>
         </div>
       </div>
-    </div>
+    </A>
   )
 }
 
