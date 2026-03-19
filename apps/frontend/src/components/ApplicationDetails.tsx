@@ -53,62 +53,61 @@ const ApplicationDetails: Component<Props> = (props) => {
         <div>
           <dt class="text-sm font-medium text-gray-500">Taille</dt>
           <dd class="mt-1 text-sm text-gray-900">
-            {(props.application.size || 1 / 1024 / 1024).toFixed(2)} MB
+            {((props.application.size || 0) / 1024 / 1024).toFixed(2)} MB
           </dd>
         </div>
         <div>
           <dt class="text-sm font-medium text-gray-500">Ajouté le</dt>
           <dd class="mt-1 text-sm text-gray-900">
-            {new Date(props.application.createdAt || '').toLocaleDateString(
-              'fr-FR',
-              {
-                dateStyle: 'long'
-              }
-            )}
+            {new Date(props.application.createdAt).toLocaleDateString('fr-FR', {
+              dateStyle: 'long'
+            })}
           </dd>
         </div>
       </dl>
 
       <Show when={props.application.scanResult}>
-        <div class="mt-6">
-          <h2 class="text-lg font-semibold mb-4">Résultats du scan</h2>
+        {(result) => (
+          <div class="mt-6">
+            <h2 class="text-lg font-semibold mb-4">Résultats du scan</h2>
 
-          <div class="bg-gray-50 rounded-lg p-4">
-            <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
-              <div class="text-center">
-                <div class="text-2xl font-bold text-green-600">
-                  {props.application.scanResult.stats?.harmless || 0}
+            <div class="bg-gray-50 rounded-lg p-4">
+              <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                <div class="text-center">
+                  <div class="text-2xl font-bold text-green-600">
+                    {result().stats?.undetected || 0}
+                  </div>
+                  <div class="text-sm text-gray-500">Sûrs</div>
                 </div>
-                <div class="text-sm text-gray-500">Sûrs</div>
-              </div>
-              <div class="text-center">
-                <div class="text-2xl font-bold text-red-600">
-                  {props.application.scanResult.stats?.malicious || 0}
+                <div class="text-center">
+                  <div class="text-2xl font-bold text-red-600">
+                    {result().stats?.malicious || 0}
+                  </div>
+                  <div class="text-sm text-gray-500">Malveillants</div>
                 </div>
-                <div class="text-sm text-gray-500">Malveillants</div>
-              </div>
-              <div class="text-center">
-                <div class="text-2xl font-bold text-yellow-600">
-                  {props.application.scanResult.stats?.suspicious || 0}
+                <div class="text-center">
+                  <div class="text-2xl font-bold text-yellow-600">
+                    {result().stats?.suspicious || 0}
+                  </div>
+                  <div class="text-sm text-gray-500">Suspects</div>
                 </div>
-                <div class="text-sm text-gray-500">Suspects</div>
-              </div>
-              <div class="text-center">
-                <div class="text-2xl font-bold text-gray-600">
-                  {props.application.scanResult.stats?.undetected || 0}
+                <div class="text-center">
+                  <div class="text-2xl font-bold text-gray-600">
+                    {result().stats?.harmless || 0}
+                  </div>
+                  <div class="text-sm text-gray-500">Sans danger</div>
                 </div>
-                <div class="text-sm text-gray-500">Non détectés</div>
               </div>
+
+              <p class="mt-4 text-sm text-gray-500 text-center">
+                Dernière analyse:{' '}
+                {props.application.scanDate
+                  ? new Date(props.application.scanDate).toLocaleString('fr-FR')
+                  : 'Pas encore analysé'}
+              </p>
             </div>
-
-            <p class="mt-4 text-sm text-gray-500 text-center">
-              Dernière analyse:{' '}
-              {new Date(
-                props.application.scanResult.scanDate * 1000
-              ).toLocaleString('fr-FR')}
-            </p>
           </div>
-        </div>
+        )}
       </Show>
     </div>
   )

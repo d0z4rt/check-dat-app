@@ -16,7 +16,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express'
 import type { Response } from 'express'
 
-import type { UpdateApplicationDto } from './application.interface'
+import { UpdateApplicationDto } from './application.dto'
 import { ApplicationsService } from './applications.service'
 
 @UseInterceptors(ClassSerializerInterceptor)
@@ -56,6 +56,11 @@ export class ApplicationsController {
     if (!application) {
       throw new HttpException('Application non trouvée', HttpStatus.NOT_FOUND)
     }
+
+    if (typeof application.scanResult === 'string') {
+      application.scanResult = JSON.parse(application.scanResult)
+    }
+
     return application
   }
 
@@ -74,6 +79,7 @@ export class ApplicationsController {
     @Param('id') id: string,
     @Body() updateData: UpdateApplicationDto
   ) {
+    console.log(updateData)
     const application = await this.applicationsService.update(id, updateData)
     if (!application) {
       throw new HttpException('Application non trouvée', HttpStatus.NOT_FOUND)

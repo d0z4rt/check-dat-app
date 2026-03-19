@@ -13,7 +13,7 @@ export class VirusTotalService {
     private httpService: HttpService,
     private configService: ConfigService
   ) {
-    this.apiKey = this.configService.get<string>('VIRUSTOTAL_API_KEY') as string
+    this.apiKey = this.configService.get<string>('VIRUSTOTAL_API_KEY', '')
   }
 
   async scanFile(hash: string): Promise<any> {

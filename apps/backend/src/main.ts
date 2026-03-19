@@ -9,7 +9,12 @@ async function bootstrap() {
   /**
    * TODO restrict domain access
    */
-  app.enableCors()
+  app.enableCors({
+    origin: process.env.ALLOWED_ORIGINS?.split(',') || [
+      'http://localhost:3000'
+    ],
+    credentials: true
+  })
 
   /**
    * Enable validation

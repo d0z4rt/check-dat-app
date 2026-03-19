@@ -6,7 +6,7 @@ import {
   UpdateDateColumn
 } from 'typeorm'
 
-import type { ScanStatus } from './application.interface'
+import type { ScanStatus } from './application.dto'
 
 @Entity()
 export class Application {
@@ -37,7 +37,7 @@ export class Application {
   @Column('jsonb', { nullable: true })
   scanResult: string
 
-  @CreateDateColumn({ type: 'timestamptz', precision: 3 })
+  @Column({ type: 'timestamptz', precision: 3 })
   scanDate: Date
 
   @CreateDateColumn({ type: 'timestamptz', precision: 3 })

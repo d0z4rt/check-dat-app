@@ -98,15 +98,15 @@ const ApplicationCard: Component<Props> = (props) => {
           </span>
 
           <Show when={props.application.scanResult?.stats}>
-            <div class="text-xs text-gray-500">
-              <span class="text-green-600">
-                {props.application.scanResult.stats.harmless} sûrs
-              </span>
-              {' · '}
-              <span class="text-red-600">
-                {props.application.scanResult.stats.malicious} malveillants
-              </span>
-            </div>
+            {(stats) => (
+              <div class="text-xs text-gray-500">
+                <span class="text-green-600">{stats().harmless} sûrs</span>
+                {' · '}
+                <span class="text-red-600">
+                  {stats().malicious} malveillants
+                </span>
+              </div>
+            )}
           </Show>
 
           <button

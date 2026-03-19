@@ -9,6 +9,8 @@ const configSchema = z.object({
   DB_NAME: z.string().min(1),
   DB_USER: z.string().min(1),
   DB_PASSWORD: z.string().min(1),
+  REDIS_HOST: z.string().min(1),
+  REDIS_PORT: z.string().min(1),
   VIRUSTOTAL_API_KEY: z.string().min(1)
 })
 

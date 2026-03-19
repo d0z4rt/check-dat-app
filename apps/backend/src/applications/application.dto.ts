@@ -25,17 +25,3 @@ export class UpdateApplicationDto {
 }
 
 export type ScanStatus = 'PENDING' | 'SCANNING' | 'SAFE' | 'MALICIOUS' | 'ERROR'
-
-export type Application = {
-  id: string
-  filename: string
-  filePath: string
-  hash: string
-  size: number
-  name?: string
-  comment?: string
-  scanStatus: ScanStatus
-  scanResult?: any
-  createdAt: Date
-  updatedAt: Date
-}

@@ -28,7 +28,6 @@ export class QueueProcessor extends WorkerHost {
 
       const result = await this.virusTotalService.scanFile(hash)
 
-      // Mettre à jour le résultat
       await this.applicationsService.update(applicationId, {
         scanStatus: result.status === 'MALICIOUS' ? 'MALICIOUS' : 'SAFE',
         scanResult: JSON.stringify(result)

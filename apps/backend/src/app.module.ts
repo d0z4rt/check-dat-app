@@ -1,6 +1,6 @@
 import { BullModule } from '@nestjs/bullmq'
 import { Module } from '@nestjs/common'
-import { ConfigModule } from '@nestjs/config'
+import { ConfigModule, ConfigService } from '@nestjs/config'
 import { APP_GUARD } from '@nestjs/core'
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
 import { TypeOrmModule } from '@nestjs/typeorm'
@@ -29,11 +29,15 @@ import { VirusTotalModule } from './virus-total/virus-total.module'
       imports: [ConfigModule],
       useClass: TypeOrmConfigService
     }),
-    BullModule.forRoot({
-      connection: {
-        host: 'localhost',
-        port: 6379
-      }
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        connection: {
+          host: configService.get('REDIS_HOST', 'localhost'),
+          port: configService.get('REDIS_PORT', 6379)
+        }
+      })
     }),
     ApplicationsModule,
     VirusTotalModule

@@ -2,7 +2,7 @@ import { InjectQueue } from '@nestjs/bullmq'
 import { Injectable } from '@nestjs/common'
 import { Queue } from 'bullmq'
 
-import { Application } from '../applications/application.interface'
+import type { Application } from '../applications/application.entity'
 
 @Injectable()
 export class QueueService {

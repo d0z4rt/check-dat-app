@@ -19,7 +19,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       retryAttempts: 10,
       retryDelay: 3000,
       autoLoadEntities: true,
-      synchronize: true, // set to false in prod
+      synchronize: this.configService.get('NODE_ENV') !== 'production',
       logging: false
     }
   }

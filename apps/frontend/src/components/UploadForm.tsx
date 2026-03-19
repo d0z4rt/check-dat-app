@@ -27,7 +27,7 @@ const UploadForm: Component = () => {
 
       // Vérifier la taille (max 200MB)
       if (selectedFile.size > 200 * 1024 * 1024) {
-        toast.error('Le fichier ne doit pas dépasser 100MB')
+        toast.error('Le fichier ne doit pas dépasser 200MB')
         input.value = ''
         return
       }
