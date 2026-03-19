@@ -35,7 +35,7 @@ export class Application {
   scanStatus: ScanStatus
 
   @Column('jsonb', { nullable: true })
-  scanResult: string
+  scanResult: any
 
   @Column({ type: 'timestamptz', precision: 3 })
   scanDate: Date

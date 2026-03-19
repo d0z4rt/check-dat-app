@@ -57,10 +57,6 @@ export class ApplicationsController {
       throw new HttpException('Application non trouvée', HttpStatus.NOT_FOUND)
     }
 
-    if (typeof application.scanResult === 'string') {
-      application.scanResult = JSON.parse(application.scanResult)
-    }
-
     return application
   }
 
@@ -71,7 +67,14 @@ export class ApplicationsController {
       throw new HttpException('Application non trouvée', HttpStatus.NOT_FOUND)
     }
 
-    return res.download(application.filePath, application.filename)
+    return res.download(application.filePath, application.filename, (err) => {
+      if (err) {
+        // Check if headers are already sent to prevent "Cannot set headers after they are sent to the client"
+        if (!res.headersSent) {
+          res.status(404).json({ message: 'Fichier introuvable sur le disque' })
+        }
+      }
+    })
   }
 
   @Put(':id')

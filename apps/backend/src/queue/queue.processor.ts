@@ -31,8 +31,8 @@ export class QueueProcessor extends WorkerHost {
       const result = await this.virusTotalService.scanFile(hash)
 
       await this.applicationsService.update(applicationId, {
-        scanStatus: result.status === 'MALICIOUS' ? 'MALICIOUS' : 'SAFE',
-        scanResult: JSON.stringify(result)
+        scanStatus: result.status,
+        scanResult: result
       })
 
       this.notifyService.emitScanCompleted(applicationId, result)
@@ -43,7 +43,7 @@ export class QueueProcessor extends WorkerHost {
 
       await this.applicationsService.update(applicationId, {
         scanStatus: 'ERROR',
-        scanResult: JSON.stringify({ error: error.message })
+        scanResult: { error: error.message }
       })
 
       this.notifyService.emitScanFailed(applicationId, error)

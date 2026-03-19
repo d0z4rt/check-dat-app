@@ -1,5 +1,5 @@
 import { Controller, Sse, MessageEvent } from '@nestjs/common'
-import { interval, Observable } from 'rxjs'
+import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 
 import { NotifyService } from './notify.service'

@@ -128,7 +128,7 @@ const ApplicationCard: Component<Props> = (props) => {
             {(stats) => (
               <div class="text-xs bg-slate-900/50 rounded-lg px-3 py-2 border border-slate-700/50">
                 <span class="text-green-400">
-                  {stats().harmless} sûr{stats().harmless !== 1 ? 's' : ''}
+                  {stats().undetected} sûr{stats().undetected !== 1 ? 's' : ''}
                 </span>
                 <span class="text-slate-400 mx-1">·</span>
                 <span class="text-red-400">
