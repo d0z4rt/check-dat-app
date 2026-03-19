@@ -42,12 +42,11 @@ const useScanSSE = () => {
         return
       }
       // EventSource tries to reconnect automatically, but you can handle UI states here
-      eventSource.close()
+      // eventSource.close()
     }
-
-    // Cleanup the connection when the component is unmounted
   })
 
+  // Cleanup the connection when the component is unmounted
   onCleanup(() => {
     eventSource?.close()
   })

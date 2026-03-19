@@ -1,7 +1,8 @@
 import { createHash } from 'node:crypto'
+import { createReadStream } from 'node:fs'
 import fs from 'node:fs/promises'
 
-import { Injectable } from '@nestjs/common'
+import { Injectable, InternalServerErrorException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
@@ -17,13 +18,32 @@ export class ApplicationsService {
   ) {}
 
   async create(file: Express.Multer.File) {
-    const fileBuffer = await fs.readFile(file.path)
-    const hash = createHash('sha256').update(fileBuffer).digest('hex')
+    // previous implementation loading the full file in memory
+    // const fileBuffer = await fs.readFile(file.path)
+    // const hash = createHash('sha256').update(fileBuffer).digest('hex')
+
+    /**
+     * Prevent Out Of Memory using a read stream
+     * Updates the hash incrementally with each chunk
+     */
+    let hash: string
+    try {
+      hash = await new Promise((resolve, reject) => {
+        const hashInstance = createHash('sha256')
+        const stream = createReadStream(file.path)
+        stream.on('error', (err) => reject(err))
+        stream.on('data', (chunk) => hashInstance.update(chunk))
+        stream.on('end', () => resolve(hashInstance.digest('hex')))
+      })
+    } catch {
+      await fs.unlink(file.path).catch(() => {})
+      throw new InternalServerErrorException('Erreur de traitement du fichier')
+    }
 
     const existingApp = await this.repository.findOne({ where: { hash } })
 
     if (existingApp) {
-      await fs.unlink(file.path)
+      await fs.unlink(file.path).catch(() => {})
       throw new Error('Cette application a déjà été téléversée')
     }
 
@@ -34,11 +54,16 @@ export class ApplicationsService {
       size: file.size
     })
 
-    const savedApplication = await this.repository.save(application)
-
-    await this.queueService.addToScanQueue(savedApplication)
-
-    return savedApplication
+    try {
+      const savedApplication = await this.repository.save(application)
+      await this.queueService.addToScanQueue(savedApplication)
+      return savedApplication
+    } catch {
+      await fs.unlink(file.path).catch(() => {})
+      throw new InternalServerErrorException(
+        "Erreur de sauvegarde de l'application"
+      )
+    }
   }
 
   async findAll() {

@@ -79,7 +79,6 @@ export class ApplicationsController {
     @Param('id') id: string,
     @Body() updateData: UpdateApplicationDto
   ) {
-    console.log(updateData)
     const application = await this.applicationsService.update(id, updateData)
     if (!application) {
       throw new HttpException('Application non trouvée', HttpStatus.NOT_FOUND)

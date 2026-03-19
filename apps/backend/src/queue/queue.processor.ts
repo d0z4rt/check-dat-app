@@ -30,8 +30,6 @@ export class QueueProcessor extends WorkerHost {
 
       const result = await this.virusTotalService.scanFile(hash)
 
-      await new Promise((resolve) => setTimeout(resolve, 10000))
-
       await this.applicationsService.update(applicationId, {
         scanStatus: result.status === 'MALICIOUS' ? 'MALICIOUS' : 'SAFE',
         scanResult: JSON.stringify(result)

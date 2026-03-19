@@ -1,6 +1,6 @@
 import { extname } from 'node:path'
 
-import { forwardRef, Module } from '@nestjs/common'
+import { BadRequestException, forwardRef, Module } from '@nestjs/common'
 import { MulterModule } from '@nestjs/platform-express'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { diskStorage } from 'multer'
@@ -26,7 +26,10 @@ import { ApplicationsService } from './applications.service'
       }),
       fileFilter: (req, file, cb) => {
         if (!file.originalname.match(/\.(apk)$/)) {
-          return cb(new Error('Seuls les fichiers APK sont autorisés'), false)
+          return cb(
+            new BadRequestException('Seuls les fichiers APK sont autorisés'),
+            false
+          )
         }
         cb(null, true)
       },
