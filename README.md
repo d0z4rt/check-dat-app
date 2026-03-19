@@ -52,8 +52,8 @@ You need three `.env` to be set up: one for Docker, one for the frontend (option
 
 ```sh
 cp .env.example .env
-cp ./apps/web/.env.example ./apps/frontend/.env
-cp ./apps/server/.env.example ./apps/backend/.env
+cp ./apps/frontend/.env.example ./apps/frontend/.env
+cp ./apps/backend/.env.example ./apps/backend/.env
 ```
 
 _(Note: Ensure these match what you want Docker to provision)._
